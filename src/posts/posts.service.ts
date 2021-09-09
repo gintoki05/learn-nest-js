@@ -9,8 +9,8 @@ import { Post, PostDocument } from './schemas/posts.schema';
 export class PostsService {
   constructor(@InjectModel(Post.name) private postModel: Model<PostDocument>) {}
 
-  create(createPostDto: CreatePostDto) {
-    const createdPost = new this.postModel(createPostDto);
+  async create(createPostDto: CreatePostDto) {
+    const createdPost = await new this.postModel(createPostDto);
     return createdPost.save();
   }
 
@@ -18,15 +18,16 @@ export class PostsService {
     return this.postModel.find().exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  async findOne(id: string): Promise<Post> {
+    return await this.postModel.findById(id).exec();
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+  async update(id: string, updatePostDto: UpdatePostDto): Promise<Post> {
+    return await this.postModel.findByIdAndUpdate(id, updatePostDto).exec();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  async remove(id: string) {
+    await this.postModel.findByIdAndDelete(id).exec();
+    return 'Berhasil hapus';
   }
 }
