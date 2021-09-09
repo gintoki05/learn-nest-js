@@ -10,7 +10,8 @@ export class PostsService {
   constructor(@InjectModel(Post.name) private postModel: Model<PostDocument>) {}
 
   create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
+    const createdPost = new this.postModel(createPostDto);
+    return createdPost.save();
   }
 
   async findAll(): Promise<Post[]> {
